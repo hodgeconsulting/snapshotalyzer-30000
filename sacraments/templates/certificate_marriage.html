@@ -1,0 +1,28 @@
+{% extends "certificate_base.html" %}
+{% block body %}
+<p class="opening">This is to certify that</p>
+
+<p class="principal"><span class="merge name">{{ data.groom_name }}</span></p>
+<p class="conjunction">and</p>
+<p class="principal"><span class="merge name">{{ data.bride_name }}</span></p>
+
+<p>were united in the Holy Mystery of</p>
+<p class="mystery">Marriage</p>
+<p>according to the rite of the Holy Orthodox Church</p>
+
+<p>on <span class="merge">{{ data.date_of_marriage | longdate }}</span></p>
+
+<p>at <span class="merge">{{ data.place_of_sacrament or settings.get('parish_name', '') }}</span>{% if not data.place_of_sacrament and settings.get('parish_city') %},
+   {{ settings.parish_city }}{% endif %}.</p>
+
+<div class="cert-facts">
+  <p><span class="label">Witnesses:</span>
+     <span class="merge">{{ data.witnesses }}</span></p>
+  {% if data.license_info %}
+  <p><span class="label">Civil License:</span>
+     <span class="merge">{{ data.license_info }}</span></p>
+  {% endif %}
+  <p><span class="label">Officiating Clergy:</span>
+     <span class="merge">{{ data.celebrant }}</span></p>
+</div>
+{% endblock %}

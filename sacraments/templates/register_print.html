@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Register of {{ sac.title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}">
+</head>
+<body class="register-page">
+
+<div class="no-print toolbar">
+  <a href="{{ url_for('record_list', stype=stype) }}">&larr; Back</a>
+  <button onclick="window.print()">Print Register</button>
+</div>
+
+<header class="register-header">
+  <div class="cross">☦</div>
+  <h1>Register of {{ sac.title }}</h1>
+  <p>{{ settings.get('parish_name', '') }}{% if settings.get('parish_city') %}, {{ settings.parish_city }}{% endif %}</p>
+  {% if settings.get('diocese') %}<p>{{ settings.diocese }}</p>{% endif %}
+</header>
+
+<table class="register-table">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Vol./Pg.</th>
+      {% for key in sac.register_columns %}
+        <th>{{ fmap[key].label }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in records %}
+    <tr>
+      <td>{{ r.record_number }}</td>
+      <td>{{ r.volume }}{% if r.volume and r.page %}/{% endif %}{{ r.page }}</td>
+      {% for key in sac.register_columns %}
+        {% set value = r.data.get(key, '') %}
+        <td>{% if value and fmap[key].type == 'date' %}{{ value | longdate }}{% else %}{{ value }}{% endif %}</td>
+      {% endfor %}
+    </tr>
+    {% else %}
+    <tr><td colspan="{{ sac.register_columns | length + 2 }}">No records.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<footer class="register-footer">
+  <p>Printed {{ today | longdate }} &mdash; {{ records | length }}
+     record{{ '' if records|length == 1 else 's' }}</p>
+</footer>
+
+</body>
+</html>

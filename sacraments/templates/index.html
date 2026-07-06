@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Sacramental Records — Home{% endblock %}
+{% block content %}
+
+{% if not settings.get('parish_name') %}
+<div class="notice">
+  Welcome! Start by entering your parish information under
+  <a href="{{ url_for('settings_page') }}">Parish Settings</a> —
+  it appears on every certificate and register page.
+</div>
+{% endif %}
+
+<h2>Registers</h2>
+<div class="card-grid">
+  {% for key, sac in SACRAMENTS.items() %}
+  <div class="card">
+    <h3><a href="{{ url_for('record_list', stype=key) }}">{{ sac.title }}</a></h3>
+    <p class="count">{{ counts[key] }} record{{ '' if counts[key] == 1 else 's' }}</p>
+    <p class="card-actions">
+      <a class="button" href="{{ url_for('record_new', stype=key) }}">+ New Entry</a>
+      <a class="button secondary" href="{{ url_for('register_print', stype=key) }}">Print Register</a>
+    </p>
+  </div>
+  {% endfor %}
+</div>
+
+<h2>Recently Updated</h2>
+{% if recent %}
+<table class="records">
+  <thead>
+    <tr><th>Register</th><th>Name</th><th>Date of Sacrament</th><th>Entry No.</th></tr>
+  </thead>
+  <tbody>
+    {% for r in recent %}
+    <tr>
+      <td>{{ SACRAMENTS[r.sacrament].singular }}</td>
+      <td><a href="{{ url_for('record_detail', stype=r.sacrament, record_id=r.id) }}">{{ r.display_name or '(no name)' }}</a></td>
+      <td>{{ r.primary_date | longdate }}</td>
+      <td>{{ r.record_number }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No records yet. Choose a register above to make your first entry.</p>
+{% endif %}
+
+{% endblock %}

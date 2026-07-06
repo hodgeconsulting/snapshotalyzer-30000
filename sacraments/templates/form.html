@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if record else 'New' }} {{ sac.singular }}{% endblock %}
+{% block content %}
+
+<h2>{{ 'Edit' if record else 'New' }} {{ sac.singular }} Record</h2>
+
+<form method="post" class="record-form">
+  <fieldset>
+    <legend>Register Reference</legend>
+    <p class="section-help">Where this entry lives in the physical register book.</p>
+    <div class="field-row">
+      {% for f in REGISTER_FIELDS %}
+      <div class="field small">
+        <label for="{{ f.key }}">{{ f.label }}</label>
+        <input type="text" id="{{ f.key }}" name="{{ f.key }}"
+               value="{{ register.get(f.key, '') }}">
+        {% if f.help %}<span class="help">{{ f.help }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  {% for section in sac.sections %}
+  <fieldset>
+    <legend>{{ section.title }}</legend>
+    <div class="field-row">
+      {% for f in section.fields %}
+      <div class="field {{ 'wide' if f.type == 'textarea' else '' }}">
+        <label for="{{ f.key }}">
+          {{ f.label }}{% if f.required %} <span class="req">*</span>{% endif %}
+        </label>
+        {% if f.type == 'textarea' %}
+          <textarea id="{{ f.key }}" name="{{ f.key }}" rows="3">{{ data.get(f.key, '') }}</textarea>
+        {% elif f.type == 'select' %}
+          <select id="{{ f.key }}" name="{{ f.key }}">
+            <option value="">&mdash; select &mdash;</option>
+            {% for opt in f.options %}
+              <option value="{{ opt }}" {{ 'selected' if data.get(f.key) == opt }}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        {% elif f.type == 'date' %}
+          <input type="date" id="{{ f.key }}" name="{{ f.key }}"
+                 value="{{ data.get(f.key, '') }}">
+        {% else %}
+          <input type="text" id="{{ f.key }}" name="{{ f.key }}"
+                 value="{{ data.get(f.key, '') }}">
+        {% endif %}
+        {% if f.help %}<span class="help">{{ f.help }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+  {% endfor %}
+
+  <div class="form-actions">
+    <button type="submit" class="button">{{ 'Save Changes' if record else 'Save Record' }}</button>
+    <a class="button secondary"
+       href="{{ url_for('record_detail', stype=stype, record_id=record.id) if record else url_for('record_list', stype=stype) }}">Cancel</a>
+  </div>
+</form>
+
+{% endblock %}

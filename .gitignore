@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Sacramental records database (contains parishioner data - keep out of git)
+sacraments/*.db

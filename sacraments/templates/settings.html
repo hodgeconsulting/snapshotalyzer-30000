@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Parish Settings{% endblock %}
+{% block content %}
+
+<h2>Parish Settings</h2>
+<p class="muted">This information is merged onto every certificate and
+printed register page.</p>
+
+<form method="post" class="record-form">
+  <fieldset>
+    <legend>Parish Information</legend>
+    <div class="field-row">
+      {% for f in fields %}
+      <div class="field">
+        <label for="{{ f.key }}">{{ f.label }}</label>
+        <input type="text" id="{{ f.key }}" name="{{ f.key }}"
+               value="{{ settings.get(f.key, '') }}">
+        {% if f.help %}<span class="help">{{ f.help }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+  <div class="form-actions">
+    <button type="submit" class="button">Save Settings</button>
+  </div>
+</form>
+
+{% endblock %}

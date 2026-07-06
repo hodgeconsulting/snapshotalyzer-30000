@@ -1,0 +1,35 @@
+{% extends "certificate_base.html" %}
+{% block body %}
+<p class="opening">This is to certify that</p>
+
+<p class="principal"><span class="merge name">{{ data.full_name }}</span></p>
+
+<p>{% if data.date_of_birth %}born on
+   <span class="merge">{{ data.date_of_birth | longdate }}</span>{% if data.place_of_birth %}
+   in <span class="merge">{{ data.place_of_birth }}</span>{% endif %},{% endif %}
+   formerly of the <span class="merge">{{ data.former_confession }}</span> confession,</p>
+
+<p>was received into the communion of</p>
+<p class="mystery">The Holy Orthodox Church</p>
+
+<p>by <span class="merge">{{ data.mode_of_reception }}</span></p>
+
+{% if data.name_in_religion %}
+<p>taking the name in religion
+   <span class="merge">{{ data.name_in_religion }}</span></p>
+{% endif %}
+
+<p>on <span class="merge">{{ data.date_of_reception | longdate }}</span></p>
+
+<p>at <span class="merge">{{ data.place_of_sacrament or settings.get('parish_name', '') }}</span>{% if not data.place_of_sacrament and settings.get('parish_city') %},
+   {{ settings.parish_city }}{% endif %}.</p>
+
+<div class="cert-facts">
+  {% if data.sponsors %}
+  <p><span class="label">Sponsor(s):</span>
+     <span class="merge">{{ data.sponsors }}</span></p>
+  {% endif %}
+  <p><span class="label">Officiating Clergy:</span>
+     <span class="merge">{{ data.celebrant }}</span></p>
+</div>
+{% endblock %}

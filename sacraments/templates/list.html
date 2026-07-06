@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ sac.title }}{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h2>{{ sac.title }}</h2>
+  <div class="actions">
+    <a class="button" href="{{ url_for('record_new', stype=stype) }}">+ New Entry</a>
+    <a class="button secondary" href="{{ url_for('register_print', stype=stype) }}">Print Register</a>
+    <a class="button secondary" href="{{ url_for('export_csv', stype=stype) }}">Export CSV</a>
+  </div>
+</div>
+
+<form method="get" class="search">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search names, sponsors, clergy...">
+  <button type="submit">Search</button>
+  {% if q %}<a href="{{ url_for('record_list', stype=stype) }}">Clear</a>{% endif %}
+</form>
+
+{% if records %}
+<table class="records">
+  <thead>
+    <tr>
+      <th>Entry No.</th>
+      <th>Name</th>
+      <th>Date of Sacrament</th>
+      <th>Volume / Page</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in records %}
+    <tr>
+      <td>{{ r.record_number }}</td>
+      <td><a href="{{ url_for('record_detail', stype=stype, record_id=r.id) }}">{{ r.display_name or '(no name)' }}</a></td>
+      <td>{{ r.primary_date | longdate }}</td>
+      <td>{{ r.volume }}{% if r.volume and r.page %} / {% endif %}{{ r.page }}</td>
+      <td class="row-actions">
+        <a href="{{ url_for('certificate', stype=stype, record_id=r.id) }}">Certificate</a>
+        <a href="{{ url_for('record_edit', stype=stype, record_id=r.id) }}">Edit</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="muted">{{ records | length }} record{{ '' if records|length == 1 else 's' }}{% if q %} matching “{{ q }}”{% endif %}.</p>
+{% else %}
+<p class="muted">No records{% if q %} matching “{{ q }}”{% endif %} in this register yet.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "certificate_base.html" %}
+{% block body %}
+<p class="opening">This is to certify that</p>
+
+<p class="principal"><span class="merge name">{{ data.full_name }}</span></p>
+
+{% if data.name_in_religion %}
+<p>having received the name in religion
+   <span class="merge">{{ data.name_in_religion }}</span>,</p>
+{% endif %}
+
+<p>
+  {% if data.father_name or data.mother_name %}
+  child of <span class="merge">{{ data.father_name or '—' }}</span>
+  and <span class="merge">{{ data.mother_name or '—' }}</span>,
+  {% endif %}
+  born on <span class="merge">{{ data.date_of_birth | longdate }}</span>{% if data.place_of_birth %}
+  in <span class="merge">{{ data.place_of_birth }}</span>{% endif %},
+</p>
+
+<p>received the Holy Mysteries of</p>
+<p class="mystery">Baptism and Chrismation</p>
+<p>according to the rite of the Holy Orthodox Church</p>
+
+<p>on <span class="merge">{{ data.date_of_baptism | longdate }}</span>{% if data.date_of_chrismation %}
+   (Chrismation on <span class="merge">{{ data.date_of_chrismation | longdate }}</span>){% endif %}</p>
+
+<p>at <span class="merge">{{ data.place_of_sacrament or settings.get('parish_name', '') }}</span>{% if not data.place_of_sacrament and settings.get('parish_city') %},
+   {{ settings.parish_city }}{% endif %}.</p>
+
+<div class="cert-facts">
+  <p><span class="label">Sponsors:</span>
+     <span class="merge">{{ data.sponsors }}</span></p>
+  <p><span class="label">Officiating Clergy:</span>
+     <span class="merge">{{ data.celebrant }}</span>{% if data.assisting_clergy %},
+     assisted by <span class="merge">{{ data.assisting_clergy }}</span>{% endif %}</p>
+</div>
+{% endblock %}

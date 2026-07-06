@@ -1,0 +1,33 @@
+{% extends "certificate_base.html" %}
+{% block body %}
+<p class="opening">This is to certify that the servant of God</p>
+
+<p class="principal"><span class="merge name">{{ data.full_name }}</span></p>
+
+<p>{% if data.age_at_death %}aged
+   <span class="merge">{{ data.age_at_death }}</span>,{% endif %}
+   having fallen asleep in the Lord on
+   <span class="merge">{{ data.date_of_death | longdate }}</span>,</p>
+
+<p>received the Order of</p>
+<p class="mystery">Christian Burial</p>
+<p>according to the rite of the Holy Orthodox Church</p>
+
+<p>on <span class="merge">{{ data.date_of_funeral | longdate }}</span></p>
+
+<p>at <span class="merge">{{ data.place_of_sacrament or settings.get('parish_name', '') }}</span>{% if not data.place_of_sacrament and settings.get('parish_city') %},
+   {{ settings.parish_city }}{% endif %}{% if data.place_of_interment %},</p>
+<p>and was interred at
+   <span class="merge">{{ data.place_of_interment }}</span>{% endif %}.</p>
+
+<div class="cert-facts">
+  {% if data.last_sacraments %}
+  <p><span class="label">Last Sacraments Received:</span>
+     <span class="merge">{{ data.last_sacraments }}</span></p>
+  {% endif %}
+  <p><span class="label">Officiating Clergy:</span>
+     <span class="merge">{{ data.celebrant }}</span></p>
+</div>
+
+<p class="memory">Memory Eternal!</p>
+{% endblock %}

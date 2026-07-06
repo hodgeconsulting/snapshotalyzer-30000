@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ sac.certificate_title }} — {{ record.display_name }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}">
+</head>
+<body class="certificate-page">
+
+<div class="no-print toolbar">
+  <a href="{{ url_for('record_detail', stype=stype, record_id=record.id) }}">&larr; Back to record</a>
+  <button onclick="window.print()">Print Certificate</button>
+  <span class="hint">Print at 100% scale on letter paper for binder filing.</span>
+</div>
+
+<div class="certificate">
+  <div class="cert-border">
+    <header class="cert-header">
+      <div class="cross">☦</div>
+      <p class="church-body">The Orthodox Church in America</p>
+      {% if settings.get('diocese') %}<p class="diocese">{{ settings.diocese }}</p>{% endif %}
+      <h2 class="parish">{{ settings.get('parish_name', '________________________') }}</h2>
+      <p class="parish-address">
+        {{ settings.get('parish_address', '') }}{% if settings.get('parish_address') and settings.get('parish_city') %} &middot; {% endif %}{{ settings.get('parish_city', '') }}
+      </p>
+    </header>
+
+    <h1 class="cert-title">{% block certificate_title %}{{ sac.certificate_title }}{% endblock %}</h1>
+
+    <div class="cert-body">
+      {% block body %}{% endblock %}
+    </div>
+
+    <footer class="cert-footer">
+      <p class="extract">
+        Extract from the Register of
+        {{ settings.get('parish_name', 'this parish') }}{% if record.volume %},
+        Volume <span class="merge">{{ record.volume }}</span>{% endif %}{% if record.page %},
+        Page <span class="merge">{{ record.page }}</span>{% endif %}{% if record.record_number %},
+        Entry No. <span class="merge">{{ record.record_number }}</span>{% endif %}.
+      </p>
+      <div class="signature-row">
+        <div class="signature">
+          <div class="line"></div>
+          <p>{{ settings.get('rector', 'Rector') }}</p>
+          <p class="sig-label">Rector</p>
+        </div>
+        <div class="seal">
+          <p>Place of<br>Parish Seal</p>
+        </div>
+        <div class="signature">
+          <div class="line"></div>
+          <p>Date of Issue</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+</body>
+</html>
