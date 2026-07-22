@@ -116,6 +116,61 @@ Records are stored in `sacraments.db` (SQLite) next to `app.py`; set
 the `SACRAMENTS_DB` environment variable to store it elsewhere. Back up
 that single file (or use the CSV export) to preserve your records.
 
+## Storing your records in iCloud (macOS)
+
+Because the database location is just the `SACRAMENTS_DB` environment
+variable, you can keep the file in iCloud Drive so it is backed up
+offsite and available across your Macs.
+
+**1. Stop the app first** (`Ctrl+C`). Never move the database while it
+is in use.
+
+**2. Move the file into iCloud Drive:**
+
+```
+mkdir -p ~/Library/Mobile\ Documents/com~apple~CloudDocs/SacramentalRecords
+mv ~/snapshotalyzer-30000/sacraments/sacraments.db \
+   ~/Library/Mobile\ Documents/com~apple~CloudDocs/SacramentalRecords/
+```
+
+(iCloud Drive lives at `~/Library/Mobile Documents/com~apple~CloudDocs/`.
+In Finder it appears as **iCloud Drive → SacramentalRecords**.)
+
+**3. Point the app at the iCloud copy permanently** by adding the
+variable to your shell profile, so every terminal uses it:
+
+```
+echo 'export SACRAMENTS_DB="$HOME/Library/Mobile Documents/com~apple~CloudDocs/SacramentalRecords/sacraments.db"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+After that, a plain `python3 app.py` uses the iCloud database. (For a
+one-off run without editing your profile, prefix the command instead:
+`SACRAMENTS_DB="$HOME/Library/Mobile Documents/com~apple~CloudDocs/SacramentalRecords/sacraments.db" python3 app.py`.)
+
+### Important cautions
+
+iCloud is a *file sync* service, not a live-database server, so:
+
+- **Run the app on only one Mac at a time.** Two Macs writing the same
+  database mid-sync can corrupt it or lose records. iCloud is safe as a
+  single-machine store plus offsite backup — not as a way to run the app
+  on two computers at once.
+- **Quit the app before switching machines**, and wait for iCloud to
+  finish uploading (the cloud icon by the file in Finder shows sync
+  status) before opening it on the other Mac.
+- **Prevent iCloud from evicting the file.** When disk is low, iCloud may
+  move the file to the cloud only. Right-click the SacramentalRecords
+  folder in Finder → **Keep Downloaded**. If the app ever can't find the
+  database, click the download (cloud) icon on the file in Finder.
+- **Still export CSV backups** (the Export CSV button). A synced `.db`
+  protects against a dead drive; a CSV protects against the database file
+  itself being damaged.
+- **If you ever copy the database by hand**, also copy any
+  `sacraments.db-wal` / `sacraments.db-shm` sidecar files that exist
+  next to it. Always quitting the app before it syncs avoids this
+  entirely.
+
 ## Customizing
 
 Field lists, register columns, and certificate titles are defined
