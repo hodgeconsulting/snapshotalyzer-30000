@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ sac.certificate_title }} — {{ record.display_name }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}">
+</head>
+<body class="certificate-page">
+
+<div class="no-print toolbar">
+  <a href="{{ url_for('record_detail', stype=stype, record_id=record.id) }}">&larr; Back to record</a>
+  <button onclick="window.print()">Print Certificate</button>
+  <span class="hint">Print at 100% scale on letter paper for binder filing.</span>
+</div>
+
+{% include 'certificate_card.html' %}
+
+</body>
+</html>

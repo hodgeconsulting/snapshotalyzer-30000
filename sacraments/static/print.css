@@ -50,6 +50,10 @@ body {
   .certificate { box-shadow: 0 2px 14px rgba(0,0,0,0.25); }
 }
 
+/* Batch (print all) view: force each certificate onto its own page. */
+.batch .certificate { break-after: page; page-break-after: always; }
+.batch .certificate:last-child { break-after: auto; page-break-after: auto; }
+
 .cert-border {
   border: 3px double var(--gold);
   outline: 1px solid var(--gold);

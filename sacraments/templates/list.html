@@ -6,6 +6,7 @@
   <h2>{{ sac.title }}</h2>
   <div class="actions">
     <a class="button" href="{{ url_for('record_new', stype=stype) }}">+ New Entry</a>
+    <a class="button secondary" href="{{ url_for('certificates_batch', stype=stype) }}">Print All Certificates</a>
     <a class="button secondary" href="{{ url_for('register_print', stype=stype) }}">Print Register</a>
     <a class="button secondary" href="{{ url_for('export_csv', stype=stype) }}">Export CSV</a>
   </div>

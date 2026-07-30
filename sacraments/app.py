@@ -284,8 +284,24 @@ def record_delete(stype, record_id):
 def certificate(stype, record_id):
     sac = valid_sacrament(stype)
     record = fetch_record(stype, record_id)
-    return render_template(f"certificate_{stype}.html", stype=stype,
+    return render_template("certificate_single.html", stype=stype,
                            sac=sac, record=record, data=record["data"])
+
+
+@app.route("/records/<stype>/certificates")
+def certificates_batch(stype):
+    """Every certificate in a register, one per page, for batch printing."""
+    sac = valid_sacrament(stype)
+    rows = get_db().execute(
+        "SELECT * FROM records WHERE sacrament = ?"
+        " ORDER BY primary_date, id", (stype,)).fetchall()
+    records = []
+    for row in rows:
+        record = dict(row)
+        record["data"] = json.loads(row["data"])
+        records.append(record)
+    return render_template("certificate_batch.html", stype=stype, sac=sac,
+                           records=records)
 
 
 @app.route("/records/<stype>/register")

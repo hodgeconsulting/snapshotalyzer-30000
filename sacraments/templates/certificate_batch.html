@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ sac.certificate_title }} — All Certificates</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}">
+</head>
+<body class="certificate-page batch">
+
+<div class="no-print toolbar">
+  <a href="{{ url_for('record_list', stype=stype) }}">&larr; Back to {{ sac.title }}</a>
+  <button onclick="window.print()">Print All Certificates</button>
+  <span class="hint">
+    {{ records | length }} certificate{{ '' if records|length == 1 else 's' }},
+    one per page. Print at 100% scale on letter paper for binder filing.
+  </span>
+</div>
+
+{% if records %}
+  {% for r in records %}
+    {% with record = r, data = r.data %}
+      {% include 'certificate_card.html' %}
+    {% endwith %}
+  {% endfor %}
+{% else %}
+  <p class="no-print" style="text-align:center;margin:3rem;">
+    No records in this register yet.
+  </p>
+{% endif %}
+
+</body>
+</html>

@@ -30,6 +30,9 @@ register book. Entry numbers are suggested automatically in sequence.
 - Print-ready certificates: US letter, decorative border, signature and
   seal block, and an "extract from the register" line — print from the
   browser at 100% scale and file in a binder
+- Batch printing: a "Print All Certificates" page renders every
+  certificate in a register, one per page, for printing a whole binder
+  in a single pass
 - Printable ledger-style register pages per sacrament
 - Search across each register
 - CSV export of each register for backup

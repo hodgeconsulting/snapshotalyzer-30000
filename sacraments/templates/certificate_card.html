@@ -1,18 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>{{ sac.certificate_title }} — {{ record.display_name }}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}">
-</head>
-<body class="certificate-page">
-
-<div class="no-print toolbar">
-  <a href="{{ url_for('record_detail', stype=stype, record_id=record.id) }}">&larr; Back to record</a>
-  <button onclick="window.print()">Print Certificate</button>
-  <span class="hint">Print at 100% scale on letter paper for binder filing.</span>
-</div>
-
+{# One certificate. Expects: stype, sac, record, data, settings.
+   The per-sacrament wording lives in body_<stype>.html. Shared by the
+   single-certificate page and the batch (print all) page. #}
 <div class="certificate">
   <div class="cert-border">
     <header class="cert-header">
@@ -25,10 +13,10 @@
       </p>
     </header>
 
-    <h1 class="cert-title">{% block certificate_title %}{{ sac.certificate_title }}{% endblock %}</h1>
+    <h1 class="cert-title">{{ sac.certificate_title }}</h1>
 
     <div class="cert-body">
-      {% block body %}{% endblock %}
+      {% include 'body_' ~ stype ~ '.html' %}
     </div>
 
     <footer class="cert-footer">
@@ -56,6 +44,3 @@
     </footer>
   </div>
 </div>
-
-</body>
-</html>
