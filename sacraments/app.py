@@ -360,4 +360,15 @@ def settings_page():
 init_db()
 
 if __name__ == "__main__":
-    app.run(debug=True, port=int(os.environ.get("PORT", 5000)))
+    # HOST controls who can reach the app. The default (127.0.0.1) is
+    # this computer only. Set HOST=0.0.0.0 to also serve other devices on
+    # your local network — e.g. an iPad in Safari — reaching this machine
+    # at http://<this-computer's-LAN-IP>:5000.
+    host = os.environ.get("HOST", "127.0.0.1")
+    port = int(os.environ.get("PORT", 5000))
+    # Flask's debugger can run arbitrary code, so never enable it when the
+    # app is reachable from the network. Default it on only for localhost;
+    # FLASK_DEBUG=1 / 0 overrides.
+    default_debug = "1" if host in ("127.0.0.1", "localhost") else "0"
+    debug = os.environ.get("FLASK_DEBUG", default_debug) == "1"
+    app.run(host=host, port=port, debug=debug)

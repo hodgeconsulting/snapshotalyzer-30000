@@ -119,6 +119,64 @@ Records are stored in `sacraments.db` (SQLite) next to `app.py`; set
 the `SACRAMENTS_DB` environment variable to store it elsewhere. Back up
 that single file (or use the CSV export) to preserve your records.
 
+## Using it from an iPad (or iPhone / another computer)
+
+The app is a normal web page, so any device with a browser can use it —
+including an iPad — as long as it can reach the computer that is running
+the app. The recommended setup is to **run the app on a Mac (or other
+computer) and open it in Safari on the iPad over your local Wi-Fi.** The
+records stay on that computer; nothing goes to the cloud.
+
+By default the app only answers requests from the computer it runs on.
+To let other devices on your network reach it, start it with
+`HOST=0.0.0.0`:
+
+```
+cd sacraments
+HOST=0.0.0.0 python3 app.py
+```
+
+Then find that computer's local network address and open it on the iPad.
+
+1. **On the Mac, find its LAN IP address:**
+   ```
+   ipconfig getifaddr en0        # Wi-Fi; try en1 if that is blank
+   ```
+   You'll get something like `192.168.1.50`.
+2. **On the iPad**, make sure it's on the **same Wi-Fi network**, open
+   Safari, and go to:
+   ```
+   http://192.168.1.50:5000
+   ```
+   (substitute your Mac's address). In Safari you can tap **Share → Add
+   to Home Screen** to get an app-like icon that opens straight to it.
+
+Printing works from the iPad too: use Safari's **Share → Print** (AirPrint)
+for certificates and register pages.
+
+Notes and cautions:
+
+- **The Mac must be on and running the app** for the iPad to reach it.
+  The iPad is only displaying the page; the Mac does the work and holds
+  the data.
+- **Keep it to your home/parish Wi-Fi.** `HOST=0.0.0.0` exposes the app
+  to everyone on that network with no password, so don't do this on
+  public or shared Wi-Fi. For safety the app automatically turns its
+  developer debugger **off** whenever it is served to the network.
+- **This is a local-network setup, not internet access.** Reaching it
+  from outside your building would mean exposing the app publicly, which
+  this simple app isn't built to do securely — tell me if you need that
+  and we'll design it properly (authentication, HTTPS, etc.).
+
+### Running natively on the iPad (advanced, usually not worth it)
+
+It is technically possible to run the Python server on the iPad itself
+using a terminal app such as **a-Shell** (free, App Store):
+`pip install flask`, then `python app.py`, then open
+`http://localhost:5000` in Safari. It works but is slow and fiddly, and
+your records would live only inside that app's sandbox. The Mac-plus-Safari
+approach above is simpler and keeps your data in one place.
+
 ## Storing your records in iCloud (macOS)
 
 Because the database location is just the `SACRAMENTS_DB` environment
