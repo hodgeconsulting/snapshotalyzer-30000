@@ -163,10 +163,31 @@ Notes and cautions:
   to everyone on that network with no password, so don't do this on
   public or shared Wi-Fi. For safety the app automatically turns its
   developer debugger **off** whenever it is served to the network.
-- **This is a local-network setup, not internet access.** Reaching it
-  from outside your building would mean exposing the app publicly, which
-  this simple app isn't built to do securely — tell me if you need that
-  and we'll design it properly (authentication, HTTPS, etc.).
+- **This is a local-network setup, not internet access.** To reach the
+  app from *outside* your building (e.g. while travelling), see
+  **Remote access** below.
+
+### Remote access from anywhere (private, via Tailscale)
+
+To use the records away from the parish — from your iPad or phone over
+cellular or any other network — without exposing them to the public
+internet, run the app as an always-on service on one Mac and reach it
+through [Tailscale](https://tailscale.com), a free private-network
+service. The records stay on that Mac; only your own signed-in devices
+can connect, over encrypted HTTPS (no domain name required).
+
+Setup is scripted — on the server Mac:
+
+```
+cd sacraments
+python3 -m pip install -r requirements.txt
+bash deploy/install-macos.sh      # always-on background service
+tailscale serve --bg 5000         # private HTTPS address for your devices
+```
+
+Full step-by-step instructions (installing Tailscale, adding the iPad,
+keeping the Mac awake, managing and uninstalling the service) are in
+**[deploy/REMOTE_ACCESS.md](deploy/REMOTE_ACCESS.md)**.
 
 ### Running natively on the iPad (advanced, usually not worth it)
 

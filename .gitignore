@@ -105,3 +105,6 @@ venv.bak/
 
 # Sacramental records database (contains parishioner data - keep out of git)
 sacraments/*.db
+
+# Generated server secret key and local launchd artifacts
+sacraments/.secret_key

@@ -1,1 +1,5 @@
 flask>=3.0
+
+# Optional: a production WSGI server for always-on / remote deployment
+# (used by serve.py). Not needed for local `python3 app.py` use.
+waitress>=3.0
